@@ -70,9 +70,9 @@ public :
 		return *this;
 	}
 
-	bool operator == (const Vector_t &vect)
+	inline bool operator == (const Vector_t &gauche, const Vector_t &droite)
 	{
-		return (this->u == vect.u && this->v == vect.v && this->w == vect.w);
+		return (gauche->u == droite->u && gauche->v == droite->v && gauche->w == droite->w);
 	}
 };
 
