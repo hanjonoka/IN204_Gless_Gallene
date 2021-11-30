@@ -3,12 +3,12 @@
 
 class Sphere:
 {   
-public:    
+private:    
     Vector_t centre;
     double radius;
     Color_t couleur;
 
-private:
+public:
     // using https://www.lighthouse3d.com/tutorials/maths/ray-sphere-intersection/
     Intersection_t intersect(Rayon ray)
     {
