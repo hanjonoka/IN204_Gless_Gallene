@@ -2,6 +2,9 @@
 //
 
 #include <iostream>
+#include "lumiere.h"
+#include "utils.h"
+#include "objets.h"
 
 int main()
 {
