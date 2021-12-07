@@ -1,19 +1,23 @@
 #include "utils.h"
 //#include "rayons.h"
 
-class Sphere_t:
+class Sphere_t
 {   
-private:    
+public:    
     Vector_t centre;
     double radius;
     Color_t couleur;
+    bool lumiere;
 
-public:
-    Sphere_t() : centre(Vector_t()), radius(1), couleur(Color_t(0, 0, 0))
+    Sphere_t() : centre(Vector_t()), radius(1), couleur(Color_t(0, 0, 0)), lumiere(false)
     {}
 
     Sphere_t(Vector_t centre, double radius, Color_t couleur) :
-        centre(centre), radius(radius), couleur(couleur)
+        centre(centre), radius(radius), couleur(couleur), lumiere(false)
+    {}
+
+    Sphere_t(Vector_t centre, double radius, Color_t couleur, bool lumiere) :
+        centre(centre), radius(radius), couleur(couleur), lumiere(lumiere)
     {}
 
     Sphere_t(const Sphere_t &sphere)
@@ -21,10 +25,11 @@ public:
         centre = sphere.centre;
         radius = sphere.radius;
         couleur = sphere.couleur;
+        lumiere = sphere.lumiere;
     }
 
     // using https://www.lighthouse3d.com/tutorials/maths/ray-sphere-intersection/
-    Intersection_t intersect(Rayon_t ray) // Return an object Intersection representing the intersection of the ray with the current object
+    Intersection_t* intersect(Rayon_t ray) // Return an object Intersection representing the intersection of the ray with the current object
     {
         // check if pc is not behind the origin of the ray
         Vector_t v = this->centre - ray.origine;  // %%%% VERIFIER QUE LE - FONCTIONNE SUR LES POSITIONS
@@ -41,19 +46,19 @@ public:
         // if d == r then intersection = pc
         else if (d == this->radius) {
             Vector_t normale = pc - this->centre;
-            Intersection_t i(distance, normale, this);
-            return i;
+            Intersection_t i(distance, normale, *this);
+            return &i;
         }
         // if d < r then 2 intersections, find the closest and its position
         else {
             double c = sqrt(pow(this->radius, 2) - pow(d, 2)); // pythagorean theorem
             double di1 = distance - c;
 
-            Vector_t i1 = ray.origin + ray.direction * di1;
+            Vector_t i1 = ray.origine + ray.direction * di1;
             Vector_t normale = i1 - this->centre;
-            Intersection_t i(di1, normale, this);
-            return i;
+            Intersection_t i(di1, normale, *this);
+            return &i;
         }
 
     }
-}
+};
