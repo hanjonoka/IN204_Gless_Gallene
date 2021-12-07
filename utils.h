@@ -1,9 +1,11 @@
 #pragma once
 #include <cstdint>
 #include <math.h>
+#include "objets.h"
 
 class Color_t
 {
+public :
 	Color_t() : R(0), G(0), B(0)
 	{}
 
@@ -18,6 +20,7 @@ class Color_t
 
 class Position_t
 {
+public :
 	Position_t() : x(0), y(0), z(0)
 	{}
 
@@ -83,6 +86,7 @@ public :
 
 class Vector_unit_t : Vector_t
 {
+public :
 	Vector_unit_t()
 	{
 		Vector_t(1, 0, 0);
@@ -94,4 +98,33 @@ class Vector_unit_t : Vector_t
 		double n = this->norme();
 		*this *= (1 / n);
 	}
+
+	Vector_unit_t(Vector_t v)
+	{
+		Vector_t(v);
+		double n = this->norme();
+		*this *= (1 / n);
+	}
+};
+
+class Intersection_t
+{
+public :
+	Intersection_t()
+	{
+		distance = 0;
+		object = NULL;
+		normale = NULL;
+	}
+
+	Intersection_t(double dist, Vector_t vect, Sphere o)
+	{
+		distance = dist;
+		normale = new Vector_unit_t(vect);
+
+	}
+
+	double distance;
+	Vector_unit_t* normale = NULL;
+	Sphere* object = NULL;
 };
