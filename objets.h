@@ -10,7 +10,7 @@ private:
 
 public:
     // using https://www.lighthouse3d.com/tutorials/maths/ray-sphere-intersection/
-    Intersection_t intersect(Rayon ray)
+    Intersection_t intersect(Rayon ray) // Return an object Intersection representing the intersection of the ray with the current object
     {
         // check if pc is not behind the origin of the ray
         Vector_t v = this.centre - ray.origin;  // %%%% VERIFIER QUE LE - FONCTIONNE SUR LES POSITIONS
@@ -18,7 +18,7 @@ public:
         if (distance <= 0) {return NULL;}  // %%%% VERIFIER QUE LE PRODUIT SCALAIRE * FONCTIONNE
 
         // find pc the projection of the center on the ray
-        Vector_t pc = ray.origin + (distance) * ray.direction; // %%% VERIF QUE DOUBLE * VECTOR FONCTIONNE OU IMPLEMENTER PROJ
+        Vector_t pc = ray.origin + ray.direction * distance; // %%% VERIF QUE DOUBLE * VECTOR FONCTIONNE OU IMPLEMENTER PROJ
 
         // check the distance d between pc and the center
         double d = norm(pc - this.center);

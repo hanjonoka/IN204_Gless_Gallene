@@ -28,5 +28,9 @@ public:
         }
         return premier_obstacle;
     }
+    void lancer_rayon(Intersection_t inter)
+    {
+        Rayon diff = Rayon()
+    }
 
 }
