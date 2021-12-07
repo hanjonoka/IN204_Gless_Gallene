@@ -144,7 +144,7 @@ public :
 		normale = NULL;
 	}
 
-	Intersection_t(double dist, Vector_t vect, Sphere o)
+	Intersection_t(double dist, Vector_t vect, Sphere_t o)
 	{
 		distance = dist;
 		normale = new Vector_unit_t(vect);
@@ -153,5 +153,5 @@ public :
 
 	double distance;
 	Vector_unit_t* normale = NULL;
-	Sphere* object = NULL;
+	Sphere_t* object = NULL;
 };
