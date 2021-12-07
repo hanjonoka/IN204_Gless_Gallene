@@ -73,6 +73,33 @@ public :
 		return *this;
 	}
 
+	Vector_t& operator += (const Vector_t vect)
+	{
+		this->u += vect.u;
+		this->v += vect.v;
+		this->w += vect.w;
+	}
+
+	Vector_t& operator + (const Vector_t vect)
+	{
+		(*this) += vect;
+		return *this;
+	}
+
+	Vector_t& operator -= (const Vector_t vect)
+	{
+		this->u -= vect.u;
+		this->v -= vect.v;
+		this->w -= vect.w;
+	}
+
+	Vector_t& operator - (const Vector_t vect)
+	{
+		(*this) -= vect;
+		return *this;
+	}
+
+
 	double operator ^ (const Vector_t& droite)
 	{
 		return (this->u * droite.u) + (this->v * droite.v) + (this->w * droite.w);
@@ -121,8 +148,8 @@ public :
 	{
 		distance = dist;
 		normale = new Vector_unit_t(vect);
-
 	}
+
 
 	double distance;
 	Vector_unit_t* normale = NULL;
