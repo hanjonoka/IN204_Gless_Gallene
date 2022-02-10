@@ -3,7 +3,7 @@
 
 
 #include "utils.h"
-//#include "rayons.h"
+#include "lumiere.h"
 
 class Sphere_t
 {   

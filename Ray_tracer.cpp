@@ -7,7 +7,7 @@
 #include "objets.h"
 #include "Ray_tracer.h"
 
-#define heigth 100
+#define height 100
 #define width 100
 
 std::vector<Sphere_t*>* scene;
@@ -31,13 +31,18 @@ void init_scene()
 
 int main()
 {
+    // Preparation de l'image de retour, format PPM
+    std::cout << "P3\n" << width << " " << height << "\n255\n";
+
     init_scene();
-    Rayon_t* matrice[heigth*width];
-    for (int i=0; i<heigth*width; i++)
+    Rayon_t* matrice[height*width];
+    for (int i=0; i<height*width; i++)
     {
         Vector_t dir = Vector_t(camera.direction - Vector_t(5,5,0) + Vector_t(0.1,0,0)*(i%width) + Vector_t(0,0.1,0)*(i/width));
         matrice[i] = new Rayon_t(camera.position, dir, scene, source);
+        std::cout << matrice[i]->color.R << ' ' << matrice[i]->color.G << ' ' << matrice[i]->color.B << "\n";
     }
+
     return 0;
 }
 
