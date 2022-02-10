@@ -147,11 +147,12 @@ public :
 	Intersection_t(double dist, Vector_t vect, Sphere_t o)
 	{
 		distance = dist;
-		normale = new Vector_unit_t(vect);
+		normale = new Vector_t(vect);
+		*normale *= (1/normale->norme());
 	}
 
 
 	double distance;
-	Vector_unit_t* normale = NULL;
+	Vector_t* normale = NULL;
 	Sphere_t* object = NULL;
 };

@@ -1,3 +1,7 @@
+#ifndef OBJETS_H
+#define OBJETS_H
+
+
 #include "utils.h"
 //#include "rayons.h"
 
@@ -7,17 +11,17 @@ public:
     Vector_t centre;
     double radius;
     Color_t couleur;
-    bool lumiere;
+    bool source;
 
-    Sphere_t() : centre(Vector_t()), radius(1), couleur(Color_t(0, 0, 0)), lumiere(false)
+    Sphere_t() : centre(Vector_t()), radius(1), couleur(Color_t(0, 0, 0)), source(false)
     {}
 
     Sphere_t(Vector_t centre, double radius, Color_t couleur) :
-        centre(centre), radius(radius), couleur(couleur), lumiere(false)
+        centre(centre), radius(radius), couleur(couleur), source(false)
     {}
 
-    Sphere_t(Vector_t centre, double radius, Color_t couleur, bool lumiere) :
-        centre(centre), radius(radius), couleur(couleur), lumiere(lumiere)
+    Sphere_t(Vector_t centre, double radius, Color_t couleur, bool source) :
+        centre(centre), radius(radius), couleur(couleur), source(source)
     {}
 
     Sphere_t(const Sphere_t &sphere)
@@ -25,7 +29,7 @@ public:
         centre = sphere.centre;
         radius = sphere.radius;
         couleur = sphere.couleur;
-        lumiere = sphere.lumiere;
+        source = sphere.source;
     }
 
     // using https://www.lighthouse3d.com/tutorials/maths/ray-sphere-intersection/
@@ -62,3 +66,5 @@ public:
 
     }
 };
+
+#endif

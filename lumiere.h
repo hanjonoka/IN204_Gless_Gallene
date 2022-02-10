@@ -1,3 +1,6 @@
+#ifndef LUMIERE_H
+#define LUMIERE_H
+
 #include "utils.h"
 #include "objets.h"
 #include <vector>
@@ -9,21 +12,32 @@ public:
     Vector_t origine;
     Vector_t direction;
     bool diffusion;
+    Intersection_t* intersect;
+    std::vector<Sphere_t*>* scene;
+    Sphere_t *source;
 
     Rayon_t() : color(Color_t()), origine(Vector_t()), direction(Vector_t()), diffusion(false)
     {}
 
-    Rayon_t(Color_t color, Vector_t origine, Vector_t direction) :
-        color(color), origine(origine), direction(direction), diffusion(false)
-    {}
+    Rayon_t(Vector_t origine, Vector_t direction, std::vector<Sphere_t*>* scene, Sphere_t *source)
+    {
+        Rayon_t(origine, direction, scene, false);
+    }
 
-    Rayon_t(Color_t color, Vector_t origine, Vector_t direction, bool diffusion) :
-        color(color), origine(origine), direction(direction), diffusion(diffusion)
-    {}
+    Rayon_t(Vector_t origine, Vector_t direction, std::vector<Sphere_t*>* scene, Sphere_t *source, bool diffusion) :
+        origine(origine), direction(direction), diffusion(diffusion), source(source)
+    {
+        intersect = trouve_premier_obstacle(this->scene);
+        if (!intersect) {
+            color = Color_t(0, 0, 0);
+        }else if(intersect->object->source){
+            color = Color_t(intersect->object->couleur);
+        }else {
+            lancer_rayons();  //Calcule la couleur du rayon
+        }
+    }
 
-
-
-    Intersection_t* trouve_premier_obstacle(std::vector<Sphere_t> scene)
+    Intersection_t* trouve_premier_obstacle(std::vector<Sphere_t*>* scene)
     {
         // Trouver un obstacle de la scene qui intersecte, donc dont l'intersection n'est pas NULL, pour avoir une distance
         Intersection_t* premier_obstacle = NULL;
@@ -31,8 +45,8 @@ public:
         //double distance_min = scene[0].intersect(this).
 
         // Iterer dans la scene pour trouver l'objet dont l'intersection est la plus proche de l'origine du rayon
-        for(auto it = std::begin(scene); it != std::end(scene); ++it) {
-            Intersection_t* inter = it->intersect(*this);
+        for(auto it = std::begin(*scene); it != std::end(*scene); ++it) {
+            Intersection_t* inter = (*it)->intersect(*this);
             if (inter != NULL) {
                 if (premier_obstacle == NULL) {premier_obstacle = inter;}
                 else {
@@ -40,22 +54,30 @@ public:
                 }
             }
         }
-        if (this->diffusion && !premier_obstacle->object->lumiere) {return NULL;}
+        if (this->diffusion && !premier_obstacle->object->source) {return NULL;}
         return premier_obstacle;
     }
-    void lancer_rayons(Intersection_t inter, Sphere_t source, std::vector<Sphere_t> scene)
+
+
+    void lancer_rayons()
     {
-        Vector_t point = this->origine + this->direction * (inter.distance/this->direction.norme());
+        Vector_t point = this->origine + this->direction * (this->intersect->distance/this->direction.norme());
 
         // Calcul du rayon diffuse
         //Color_t col_dif = // couleur de la source
-        Vector_t dir_diff = source.centre - point;
-        Rayon_t diff = Rayon_t(source.couleur, point, dir_diff, true);
-        Intersection_t* inter = diff.trouve_premier_obstacle(scene);
-        if (inter != NULL) {
-            
-        }
+        Vector_t dir_diff = source->centre - point;
+        Rayon_t diff = Rayon_t(point, dir_diff, scene, source, true);
 
+        //Calcul du rayon réfléchi
+        Vector_t dir_refl = direction - (*(intersect->normale) * (direction^ (*(intersect->normale)*2)) );
+        Rayon_t refl = Rayon_t(point, dir_refl, scene, source);
+
+        //TODO : Calcule du rayon réfracté
+
+        this->color = Color_t((diff.color.R+refl.color.R)/2, (diff.color.G+refl.color.G)/2, (diff.color.B+refl.color.B)/2);
     }
 
 };
+
+
+#endif
