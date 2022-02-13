@@ -27,4 +27,5 @@ help:
 
 clean:
 	@rm -f *.exe *~ 
+	@rm -f *.gch *~
 
