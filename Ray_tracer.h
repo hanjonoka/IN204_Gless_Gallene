@@ -1,4 +1,7 @@
 #pragma once
+#ifndef RAY_TRACER_H
+#define RAY_TRACER_H
+
 #include "utils.h"
 
 class Camera
@@ -13,3 +16,5 @@ public :
         position(pos), direction(dir), FOV(fov)
     {}
 };
+
+#endif

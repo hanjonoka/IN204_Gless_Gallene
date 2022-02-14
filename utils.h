@@ -1,7 +1,10 @@
-#pragma once
+//#pragma once
+#ifndef UTILS_H
+#define UTILS_H
+
 #include <cstdint>
 #include <math.h>
-#include "objets.h"
+//#include "objets.h"
 
 class Color_t
 {
@@ -11,6 +14,9 @@ public :
 
 	Color_t(uint8_t red, uint8_t green, uint8_t blue) :
 		R(red), G(green), B(blue)
+	{}
+	Color_t(const Color_t& c) :
+		R(c.R), G(c.G), B(c.B)
 	{}
 
 	uint8_t R;
@@ -73,7 +79,7 @@ public :
 		return *this;
 	}
 
-	Vector_t& operator += (const Vector_t vect)
+	void operator += (const Vector_t vect)
 	{
 		this->u += vect.u;
 		this->v += vect.v;
@@ -86,7 +92,7 @@ public :
 		return *this;
 	}
 
-	Vector_t& operator -= (const Vector_t vect)
+	void operator -= (const Vector_t vect)
 	{
 		this->u -= vect.u;
 		this->v -= vect.v;
@@ -128,7 +134,7 @@ public :
 
 	Vector_unit_t(Vector_t v)
 	{
-		Vector_t(v);
+		Vector_t(v.u, v.v, v.w);
 		double n = this->norme();
 		*this *= (1 / n);
 	}
@@ -151,8 +157,71 @@ public :
 		*normale *= (1/normale->norme());
 	}
 
-
 	double distance;
 	Vector_t* normale = NULL;
 	Sphere_t* object = NULL;
 };
+
+class Sphere_t
+{   
+public:    
+    Vector_t* centre;
+    double radius;
+    Color_t* couleur;
+    bool source;
+
+    Sphere_t() : centre(&Vector_t()), radius(1), couleur(&Color_t(0, 0, 0)), source(false)
+    {}
+
+    Sphere_t(Vector_t* centre, double radius, Color_t* couleur) :
+        centre(centre), radius(radius), couleur(couleur), source(false)
+    {}
+
+    Sphere_t(Vector_t* centre, double radius, Color_t* couleur, bool source) :
+        centre(centre), radius(radius), couleur(couleur), source(source)
+    {}
+
+    Sphere_t(const Sphere_t &sphere)
+    {
+        centre = sphere.centre;
+        radius = sphere.radius;
+        couleur = sphere.couleur;
+        source = sphere.source;
+    }
+
+    // using https://www.lighthouse3d.com/tutorials/maths/ray-sphere-intersection/
+    Intersection_t* intersect(Rayon_t ray) // Return an object Intersection representing the intersection of the ray with the current object
+    {
+        // check if pc is not behind the origin of the ray
+        Vector_t v = *this->centre - ray.origine;  // %%%% VERIFIER QUE LE - FONCTIONNE SUR LES POSITIONS
+        double distance = v ^ ray.direction;
+        if (distance <= 0) {return NULL;}  // %%%% VERIFIER QUE LE PRODUIT SCALAIRE * FONCTIONNE
+
+        // find pc the projection of the center on the ray
+        Vector_t pc = ray.origine + ray.direction * distance; // %%% VERIF QUE DOUBLE * VECTOR FONCTIONNE OU IMPLEMENTER PROJ
+
+        // check the distance d between pc and the center
+        double d = (pc - *this->centre).norme();
+        // if d > r then no intersection
+        if (d > this->radius) {return NULL;}
+        // if d == r then intersection = pc
+        else if (d == this->radius) {
+            Vector_t normale = pc - *this->centre;
+            Intersection_t i(distance, normale, *this);
+            return &i;
+        }
+        // if d < r then 2 intersections, find the closest and its position
+        else {
+            double c = sqrt(pow(this->radius, 2) - pow(d, 2)); // pythagorean theorem
+            double di1 = distance - c;
+
+            Vector_t i1 = ray.origine + ray.direction * di1;
+            Vector_t normale = i1 - *this->centre;
+            Intersection_t i(di1, normale, *this);
+            return &i;
+        }
+
+    }
+};
+
+#endif

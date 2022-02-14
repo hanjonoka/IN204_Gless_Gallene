@@ -2,7 +2,7 @@
 #define LUMIERE_H
 
 #include "utils.h"
-#include "objets.h"
+//#include "objets.h"
 #include <vector>
 
 class Rayon_t
@@ -31,7 +31,7 @@ public:
         if (!intersect) {
             color = Color_t(0, 0, 0);
         }else if(intersect->object->source){
-            color = Color_t(intersect->object->couleur);
+            color = Color_t(*intersect->object->couleur);
         }else {
             lancer_rayons();  //Calcule la couleur du rayon
         }
@@ -65,7 +65,7 @@ public:
 
         // Calcul du rayon diffuse
         //Color_t col_dif = // couleur de la source
-        Vector_t dir_diff = source->centre - point;
+        Vector_t dir_diff = *source->centre - point;
         Rayon_t diff = Rayon_t(point, dir_diff, scene, source, true);
 
         //Calcul du rayon réfléchi
