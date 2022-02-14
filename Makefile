@@ -6,7 +6,7 @@ CXXFLAGS = -std=c++11 -fPIC
 ifdef DEBUG
 CXXFLAGS += -g -O0 -fbounds-check -pedantic -D_GLIBCXX_DEBUG
 else
-CXXFLAGS += -O3 -march=native -Wall
+CXXFLAGS += -O0 -march=native -Wall
 endif
 
 default:	help
@@ -14,7 +14,7 @@ default:	help
 all:	Ray_tracer.exe
 
 Ray_tracer.exe:	Ray_tracer.cpp
-	$(CXX) $(CXXFLAGS) -o Ray_tracer.exe *.cpp $(LIB)
+	$(CXX) $(CXXFLAGS) -o Ray_tracer.exe Ray_tracer.cpp Ray_tracer.h lumiere.h objets.h utils.h
 
 
 help: 

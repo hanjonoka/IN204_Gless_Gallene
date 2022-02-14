@@ -1,9 +1,9 @@
 #ifndef LUMIERE_H
 #define LUMIERE_H
 
-#include "utils.h"
-//#include "objets.h"
+#include "objets.h"
 #include <vector>
+#include <iostream>
 
 class Rayon_t
 {
@@ -21,19 +21,34 @@ public:
 
     Rayon_t(Vector_t origine, Vector_t direction, std::vector<Sphere_t*>* scene, Sphere_t *source)
     {
-        Rayon_t(origine, direction, scene, false);
+        init(origine, direction, scene, source, false);
     }
 
     Rayon_t(Vector_t origine, Vector_t direction, std::vector<Sphere_t*>* scene, Sphere_t *source, bool diffusion) :
         origine(origine), direction(direction), diffusion(diffusion), source(source)
     {
+        init(origine, direction, scene, source, diffusion);
+    }
+
+    void init(Vector_t origine, Vector_t direction, std::vector<Sphere_t*>* scene, Sphere_t *source, bool diffusion){
+        this->origine = origine;
+        this->direction = direction;
+        this->scene = scene;
+        this->source = source;
+        this->diffusion = diffusion;
+
+        this->color = Color_t(128,128,128);
         intersect = trouve_premier_obstacle(this->scene);
         if (!intersect) {
             color = Color_t(0, 0, 0);
-        }else if(intersect->object->source){
-            color = Color_t(*intersect->object->couleur);
-        }else {
-            lancer_rayons();  //Calcule la couleur du rayon
+        }
+        // else if(intersect->object->source){
+        //     //color = Color_t(intersect->object->couleur);
+        //     color = Color_t(255,0,0);
+        // }
+        else {
+            //lancer_rayons();  //Calcule la couleur du rayon
+            color = Color_t(255,255,255);
         }
     }
 
@@ -46,7 +61,7 @@ public:
 
         // Iterer dans la scene pour trouver l'objet dont l'intersection est la plus proche de l'origine du rayon
         for(auto it = std::begin(*scene); it != std::end(*scene); ++it) {
-            Intersection_t* inter = (*it)->intersect(*this);
+            Intersection_t* inter = calcul_intersection(*it, this);// (*it)->intersect(*this);
             if (inter != NULL) {
                 if (premier_obstacle == NULL) {premier_obstacle = inter;}
                 else {
@@ -65,7 +80,7 @@ public:
 
         // Calcul du rayon diffuse
         //Color_t col_dif = // couleur de la source
-        Vector_t dir_diff = *source->centre - point;
+        Vector_t dir_diff = source->centre - point;
         Rayon_t diff = Rayon_t(point, dir_diff, scene, source, true);
 
         //Calcul du rayon réfléchi
@@ -77,6 +92,40 @@ public:
         this->color = Color_t((diff.color.R+refl.color.R)/2, (diff.color.G+refl.color.G)/2, (diff.color.B+refl.color.B)/2);
     }
 
+    // using https://www.lighthouse3d.com/tutorials/maths/ray-sphere-intersection/
+    static Intersection_t* calcul_intersection(Sphere_t* sphere, Rayon_t* ray) // Return an object Intersection representing the intersection of the ray with the current object
+    {
+        // check if pc is not behind the origin of the ray
+        Vector_t v = sphere->centre - ray->origine;  // %%%% VERIFIER QUE LE - FONCTIONNE SUR LES POSITIONS
+        double distance = v ^ ray->direction;
+        if (distance <= 0) {return NULL;}  // %%%% VERIFIER QUE LE PRODUIT SCALAIRE * FONCTIONNE
+
+        // find pc the projection of the center on the ray
+        Vector_t pc = ray->origine + ray->direction * distance; // %%% VERIF QUE DOUBLE * VECTOR FONCTIONNE OU IMPLEMENTER PROJ
+
+        // check the distance d between pc and the center
+        double d = (pc - sphere->centre).norme();
+        // if d > r then no intersection
+        if (d > sphere->radius) {return NULL;}
+        // if d == r then intersection = pc
+        else if (d == sphere->radius) {
+            Vector_t normale = pc - sphere->centre;
+            return new Intersection_t(distance, normale, *sphere);
+        }
+        // if d < r then 2 intersections, find the closest and its position
+        else {
+            double c = sqrt(pow(sphere->radius, 2) - pow(d, 2)); // pythagorean theorem
+            double di1 = distance - c;
+
+            Vector_t i1 = ray->origine + ray->direction * di1;
+            Vector_t normale = i1 - sphere->centre;
+            return new Intersection_t(di1, normale, *sphere);
+        }
+    }
+
+    Color_t getColor(){
+        return this->color;
+    }
 };
 
 
