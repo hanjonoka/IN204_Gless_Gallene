@@ -11,6 +11,7 @@
 #define width 100
 
 std::vector<Sphere_t*>* scene;
+std::vector<Sphere_t*>* sources;
 Sphere_t* source;
 Camera* camera;
 
@@ -32,6 +33,7 @@ void init_scene()
     sphere = new Sphere_t(Vector_t(5,5,5), 1, Color_t(255,0,0), true);
     source = sphere;
     scene->emplace_back(sphere);
+    //sources->emplace_back(sphere);
 }
 
 int main()

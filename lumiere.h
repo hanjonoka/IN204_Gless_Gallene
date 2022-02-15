@@ -15,6 +15,7 @@ public:
     Intersection_t* intersect;
     std::vector<Sphere_t*>* scene;
     Sphere_t *source;
+    std::vector<Sphere_t*>* sources;
 
     const static int NB_REBOND_MAX = 10;
     int nb_rebond = 0;
@@ -68,7 +69,7 @@ public:
 
         // Iterer dans la scene pour trouver l'objet dont l'intersection est la plus proche de l'origine du rayon
         for(auto it = std::begin(*scene); it != std::end(*scene); ++it) {
-            Intersection_t* inter = calcul_intersection(*it, this);
+            Intersection_t* inter = (*it)->calcul_intersection(this->direction, this->origine);
 
 
             if (inter != NULL) {
@@ -108,7 +109,6 @@ public:
         // this->color = Color_t(0,255,0);
     }
 
-    // using https://www.lighthouse3d.com/tutorials/maths/ray-sphere-intersection/
     static Intersection_t* calcul_intersection(Sphere_t* sphere, Rayon_t* ray) // Return an object Intersection representing the intersection of the ray with the current object
     {
         // check if pc is not behind the origin of the ray
@@ -138,10 +138,6 @@ public:
             Vector_t normale = i1 - sphere->centre;
             return new Intersection_t(di1, normale, sphere);
         }
-    }
-
-    Color_t getColor(){
-        return this->color;
     }
 };
 
