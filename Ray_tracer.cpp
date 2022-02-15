@@ -21,13 +21,16 @@ void init_scene()
 
     camera = new Camera(Vector_t(0,0,0), Vector_t(0,0,1), 10);
 
-    Sphere_t* sphere = new Sphere_t(Vector_t(0,0,10), 1, Color_t(255,0,0), false);
+    Sphere_t* sphere = new Sphere_t(Vector_t(0,0,10), 2, Color_t(255,0,0), false);
+    std::cout << sphere << "\n";
     scene->emplace_back(sphere);
 
-    sphere = new Sphere_t(Vector_t(0,2,10), 1, Color_t(0,255,0), false);
+    sphere = new Sphere_t(Vector_t(3,-3,2), 1, Color_t(0,255,0), false);
+    std::cout << sphere << "\n";
     scene->emplace_back(sphere);
 
-    sphere = new Sphere_t(Vector_t(5,5,5), 1, Color_t(255,255,255), true);
+    sphere = new Sphere_t(Vector_t(5,5,5), 1, Color_t(255,0,0), true);
+    source = sphere;
     scene->emplace_back(sphere);
 }
 
@@ -44,7 +47,7 @@ int main()
     for (int i=0; i<height*width; i++)
     {
         Vector_t dir = Vector_t(camera->direction + Vector_t(-1,-1,0) + (Vector_t(0.02,0,0)*(i%width)) + (Vector_t(0,0.02,0)*(i/width)));
-        std::cout << dir.u << " " << dir.v << " " << dir.w <<"\n";
+        // std::cout << dir.u << " " << dir.v << " " << dir.w <<"\n";
         Rayon_t* ray = new Rayon_t(camera->position, dir, scene, source);
 
         matrice[i] = ray;

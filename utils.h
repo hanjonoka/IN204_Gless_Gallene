@@ -59,14 +59,13 @@ public :
 
 	double norme()
 	{
-		return sqrt(pow(u, 2) + pow(v, 2) + pow(v, 2));
+		return sqrt(pow(u, 2) + pow(v, 2) + pow(w, 2));
 	}
 
 	template<class T>
 	Vector_t operator * (const T n)
 	{
-		(*this) *= n;
-		return *this;
+		return Vector_t(n*this->u, n*this->v,n*this->w);
 	}
 
 	template<class T>
@@ -97,10 +96,9 @@ public :
 		this->w -= vect.w;
 	}
 
-	Vector_t& operator - (const Vector_t vect)
+	Vector_t operator - (const Vector_t vect)
 	{
-		(*this) -= vect;
-		return *this;
+		return Vector_t(this->u-vect.u, this->v-vect.v, this->w-vect.w);
 	}
 
 

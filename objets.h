@@ -36,6 +36,11 @@ public:
 class Intersection_t
 {
 public :
+
+	double distance;
+	Vector_t* normale = NULL;
+	Sphere_t* object = NULL;
+    
 	Intersection_t()
 	{
 		distance = 0;
@@ -43,16 +48,14 @@ public :
 		normale = NULL;
 	}
 
-	Intersection_t(double dist, Vector_t vect, Sphere_t o)
+	Intersection_t(double dist, Vector_t vect, Sphere_t* o)
 	{
 		distance = dist;
 		normale = new Vector_t(vect);
 		*normale *= (1/normale->norme());
+        object = o;
 	}
 
-	double distance;
-	Vector_t* normale = NULL;
-	Sphere_t* object = NULL;
 };
 
 #endif
