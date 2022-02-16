@@ -23,22 +23,22 @@ public:
     Rayon_t() : color(Color_t()), origine(Vector_t()), direction(Vector_t()), diffusion(false)
     {}
 
-    Rayon_t(Vector_t origine, Vector_t direction, std::vector<Sphere_t*>* scene, Sphere_t *source)
+    Rayon_t(Vector_t origine, Vector_t direction, std::vector<Sphere_t*>* scene, std::vector<Sphere_t*>* sources)
     {
-        init(origine, direction, scene, source, false);
+        init(origine, direction, scene, sources, false);
     }
 
-    Rayon_t(Vector_t origine, Vector_t direction, std::vector<Sphere_t*>* scene, Sphere_t *source, int nb_rebond, bool diffusion)
+    Rayon_t(Vector_t origine, Vector_t direction, std::vector<Sphere_t*>* scene, std::vector<Sphere_t*>* sources, int nb_rebond, bool diffusion)
     {
         this->nb_rebond = nb_rebond+1;
-        init(origine, direction, scene, source, diffusion);
+        init(origine, direction, scene, sources, diffusion);
     }
 
-    void init(Vector_t origine, Vector_t direction, std::vector<Sphere_t*>* scene, Sphere_t *source, bool diffusion){
+    void init(Vector_t origine, Vector_t direction, std::vector<Sphere_t*>* scene, std::vector<Sphere_t*>* sources, bool diffusion){
         this->origine = origine;
         this->direction = direction;
         this->scene = scene;
-        this->source = source;
+        this->sources = sources;
         this->diffusion = diffusion;
 
         this->color = Color_t(128,128,128);
@@ -91,53 +91,29 @@ public:
     void lancer_rayons()
     {
         Vector_t point = (this->origine + (this->direction * (this->intersect->distance/this->direction.norme()) ) );
+        Vector_t normale = this->intersect->normale;
 
-
-        // Calcul du rayon diffuse
+        // Calcul des rayons diffusés
         //Color_t col_dif = // couleur de la source
-        Vector_t dir_diff = source->centre - point;
-        Rayon_t diff = Rayon_t(point, dir_diff, scene, source, nb_rebond, true);
+        Color_t col_dif = Color_t(0,0,0);
+        for(auto it = std::begin(*sources); it != std::end(*sources); ++it){
+            Sphere_t* s = *it;
+            Vector_t dir_diff = s->centre - point;
+            float kd = (dir_diff ^ normale) * (1/(dir_diff.norme() * normale.norme()));
+            if(kd<0) break;
+            Rayon_t diff = Rayon_t(point, dir_diff, scene, sources, nb_rebond, true);
+            col_dif = col_dif + (diff.color * kd);
+        }
 
         //Calcul du rayon réfléchi
-        Vector_t dir_refl = direction - (*(intersect->normale) * (direction^ (*(intersect->normale)*2)) );
-        Rayon_t refl = Rayon_t(point, dir_refl, scene, source, nb_rebond, false);
+        Vector_t dir_refl = direction - (normale * (direction^ (normale*2)) );
+        Rayon_t refl = Rayon_t(point, dir_refl, scene, sources, nb_rebond, false);
 
         //TODO : Calcule du rayon réfracté
 
-        this->color = Color_t((diff.color.R+refl.color.R)/2, (diff.color.G+refl.color.G)/2, (diff.color.B+refl.color.B)/2);
+        this->color = Color_t((col_dif.R+refl.color.R)/2, (col_dif.G+refl.color.G)/2, (col_dif.B+refl.color.B)/2);
         // this->color = diff.color;
         // this->color = Color_t(0,255,0);
-    }
-
-    static Intersection_t* calcul_intersection(Sphere_t* sphere, Rayon_t* ray) // Return an object Intersection representing the intersection of the ray with the current object
-    {
-        // check if pc is not behind the origin of the ray
-        Vector_t v = sphere->centre - ray->origine;  // %%%% VERIFIER QUE LE - FONCTIONNE SUR LES POSITIONS
-        Vector_t dir_norm = (ray->direction * (1/ray->direction.norme()));
-        double distance = (v ^ ray->direction)/ray->direction.norme();
-        if (distance <= 0) {return NULL;}  // %%%% VERIFIER QUE LE PRODUIT SCALAIRE * FONCTIONNE
-
-        // find pc the projection of the center on the ray
-        Vector_t pc = ray->origine + (dir_norm * distance); // %%% VERIF QUE DOUBLE * VECTOR FONCTIONNE OU IMPLEMENTER PROJ
-
-        // check the distance d between pc and the center
-        double d = (pc - sphere->centre).norme();
-        // if d > r then no intersection
-        if (d > sphere->radius) {return NULL;}
-        // if d == r then intersection = pc
-        else if (d == sphere->radius) {
-            Vector_t normale = pc - sphere->centre;
-            return new Intersection_t(distance, normale, sphere);
-        }
-        // if d < r then 2 intersections, find the closest and its position
-        else {
-            double c = sqrt(pow(sphere->radius, 2) - pow(d, 2)); // pythagorean theorem
-            double di1 = distance - c;
-
-            Vector_t i1 = ray->origine + ((ray->direction * (1/ray->direction.norme())) * di1);
-            Vector_t normale = i1 - sphere->centre;
-            return new Intersection_t(di1, normale, sphere);
-        }
     }
 };
 

@@ -21,6 +21,21 @@ public :
 	uint8_t R;
 	uint8_t G;
 	uint8_t B;
+
+	Color_t operator * (Color_t col){
+		return Color_t(this->R * col.R,this->G * col.G, this->B * col.B);
+	}
+
+	template<class T>
+	Color_t operator * (const T n)
+	{
+		return Color_t(n*this->R, n*this->G,n*this->B);
+	}
+
+	Color_t operator + (Color_t col){
+		return Color_t(this->R + col.R,this->G + col.G, this->B + col.B);
+	}
+
 };
 
 class Position_t
@@ -35,6 +50,7 @@ public :
 	double x;
 	double y;
 	double z;
+
 };
 
 class Vector_t

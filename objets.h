@@ -2,6 +2,7 @@
 #define OBJETS_H
 
 #include "utils.h"
+#include "materiaux.h"
 
 class Sphere_t;
 
@@ -10,21 +11,20 @@ class Intersection_t
 public :
 
 	double distance;
-	Vector_t* normale = NULL;
+	Vector_t normale;
 	Sphere_t* object = NULL;
     
 	Intersection_t()
 	{
 		distance = 0;
 		object = NULL;
-		normale = NULL;
 	}
 
 	Intersection_t(double dist, Vector_t vect, Sphere_t* o)
 	{
 		distance = dist;
-		normale = new Vector_t(vect);
-		*normale *= (1/normale->norme());
+		normale = vect;
+		normale *= (1/normale.norme());
         object = o;
 	}
 
@@ -37,16 +37,17 @@ public:
     double radius;
     Color_t couleur;
     bool source;
+    Material material;
 
     Sphere_t() : centre(Vector_t()), radius(1), couleur(Color_t(0, 0, 0)), source(false)
     {}
 
-    Sphere_t(Vector_t centre, double radius, Color_t couleur) :
-        centre(centre), radius(radius), couleur(couleur), source(false)
+    Sphere_t(Vector_t centre, double radius, Color_t couleur, Material material) :
+        centre(centre), radius(radius), couleur(couleur), source(false), material(material)
     {}
 
-    Sphere_t(Vector_t centre, double radius, Color_t couleur, bool source) :
-        centre(centre), radius(radius), couleur(couleur), source(source)
+    Sphere_t(Vector_t centre, double radius, Color_t couleur, Material material, bool source) :
+        centre(centre), radius(radius), couleur(couleur), source(source), material(material)
     {}
 
     Sphere_t(const Sphere_t &sphere)
@@ -55,6 +56,7 @@ public:
         radius = sphere.radius;
         couleur = sphere.couleur;
         source = sphere.source;
+        material = sphere.material;
     }
 
     Intersection_t* calcul_intersection(Vector_t direction, Vector_t origine) // Return an object Intersection representing the intersection of the ray with the current object
