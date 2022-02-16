@@ -7,7 +7,6 @@
 #include "utils.h"
 #include "objets.h"
 #include "Ray_tracer.h"
-//#include "rapidjson/document.h"
 #include "nlohmann/json.hpp"
 using json = nlohmann::json;
 
@@ -19,7 +18,6 @@ std::vector<Sphere_t*>* scene;
 std::vector<Sphere_t*>* sources;
 Sphere_t* source;
 Camera* camera;
-
 
 Sphere_t* load_json(json data) {
     Sphere_t* sphere = new Sphere_t();
@@ -46,10 +44,8 @@ void init_scene(char* filename)
     camera = new Camera(Vector_t(0,0,0), Vector_t(0,0,1), 10);
 
     /* Parsing json to create the scene */
-
     std::ifstream myfile(filename);
     json d;
-    Sphere_t* sphere = new Sphere_t();
 	if (myfile.is_open()) {
 		myfile >> d;
         for (int i = 0; i<(int)(d["Objects"].size()); ++i) {
@@ -60,22 +56,7 @@ void init_scene(char* filename)
         }
         myfile.close();
     }
-		
-/*
-    //Sphere_t* sphere = new Sphere_t(Vector_t(0,0,10), 2, Color_t(255,0,0), false);
-    Sphere_t* sphere = load_json(d["Objects"][0]);
-    scene->emplace_back(sphere);
-
-    //sphere = new Sphere_t(Vector_t(3,-3,2), 1, Color_t(0,255,0), false);
-    sphere = load_json(d["Objects"][1]);
-    scene->emplace_back(sphere);
-
-    //sphere = new Sphere_t(Vector_t(5,5,5), 1, Color_t(255,0,0), true);
-    sphere = load_json(d["Objects"][2]);
-    source = sphere;
-    scene->emplace_back(sphere);
-    //sources->emplace_back(sphere);
-    */
+	
 }
 
 
@@ -102,7 +83,6 @@ int main()
         image << int(matrice[i]->color.R) << ' ' << int(matrice[i]->color.G) << ' ' << int(matrice[i]->color.B) << "\n";
     }
     image.close();
-    std::cout << "reached the end wtf" << std::endl;
     return 0;
 }
 
