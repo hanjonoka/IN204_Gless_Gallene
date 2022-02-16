@@ -11,10 +11,28 @@ endif
 
 default:	help
 
+clean:
+	@rm -f *.exe *~ bin/*.o
+	@rm -f *.gch *~
+
+HEADS = bin/lumiere.o bin/Ray_tracer.o bin/objets.o bin/utils.o
+
 all:	Ray_tracer.exe
 
-Ray_tracer.exe:	Ray_tracer.cpp
-	$(CXX) $(CXXFLAGS) -o Ray_tracer.exe Ray_tracer.cpp Ray_tracer.h lumiere.h objets.h utils.h
+bin/lumiere.o:
+	$(CXX) $(CXXFLAGS) -c lumiere.h -o lumiere.o
+
+bin/Ray_tracer.o:
+	$(CXX) $(CXXFLAGS) -c Ray_tracer.h -o Ray_tracer.o
+
+bin/objets.o:
+	$(CXX) $(CXXFLAGS) -c objets.h -o objets.o
+
+bin/utils.o:
+	$(CXX) $(CXXFLAGS) -c utils.h -o utils.o
+
+Ray_tracer.exe:	$(HEADS) Ray_tracer.cpp
+	$(CXX) $(CXXFLAGS) $($EADS) Ray_tracer.cpp -o Ray_tracer.exe
 
 
 help: 
@@ -26,7 +44,5 @@ help:
 	@echo "    CXX      :    $(CXX)"
 	@echo "    CXXFLAGS :    $(CXXFLAGS)"
 
-clean:
-	@rm -f *.exe *~ 
-	@rm -f *.gch *~
+
 
