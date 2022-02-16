@@ -14,8 +14,10 @@ default:	help
 all:	Ray_tracer.exe
 
 Ray_tracer.exe:	Ray_tracer.cpp
-	$(CXX) $(CXXFLAGS) -o Ray_tracer.exe Ray_tracer.cpp Ray_tracer.h lumiere.h objets.h utils.h
+	$(CXX) $(CXXFLAGS) -o Ray_tracer.exe Ray_tracer.cpp Ray_tracer.h lumiere.h objets.h utils.h materiaux.h
 
+testplan: testplan.cpp
+	$(CXX) $(CXXFLAGS) -o testplan.exe testplan.cpp objets.h utils.h materiaux.h
 
 help: 
 	@echo "Available targets : "
