@@ -92,13 +92,13 @@ public:
     {
         Vector_t point = (this->origine + (this->direction * (this->intersect->distance/this->direction.norme()) ) );
         Vector_t normale = this->intersect->normale;
+        Sphere_t* o = intersect->object;
 
         // Calcul des rayons diffusés
         //Color_t col_dif = // couleur de la source
         Color_t col_dif = Color_t(0,0,0);
         for(auto it = std::begin(*sources); it != std::end(*sources); ++it){
             Sphere_t* s = *it;
-            Sphere_t* o = intersect->object;
             Vector_t dir_diff = s->centre - point;
             float kd = (dir_diff ^ normale) * (1/(dir_diff.norme() * normale.norme()));
             if(kd>0){
@@ -108,14 +108,16 @@ public:
         }
 
         //Calcul du rayon réfléchi
+        Color_t col_refl = Color_t(0,0,0);
         Vector_t dir_refl = direction - (normale * (direction^ (normale*2)) );
         Rayon_t refl = Rayon_t(point, dir_refl, scene, sources, nb_rebond, false);
+        col_refl = refl.color * o->material.k_refl;
 
         //TODO : Calcule du rayon réfracté
 
         // this->color = Color_t((col_dif.R+refl.color.R)/2, (col_dif.G+refl.color.G)/2, (col_dif.B+refl.color.B)/2);
         // this->color = diff.color;
-        this->color = col_dif;
+        this->color = col_dif + col_refl;
     }
 };
 
