@@ -11,19 +11,19 @@ public :
 	Color_t() : R(0), G(0), B(0)
 	{}
 
-	Color_t(uint8_t red, uint8_t green, uint8_t blue) :
+	Color_t(float red, float green, float blue) :
 		R(red), G(green), B(blue)
 	{}
 	Color_t(const Color_t& c) :
 		R(c.R), G(c.G), B(c.B)
 	{}
 
-	uint8_t R;
-	uint8_t G;
-	uint8_t B;
+	float R;
+	float G;
+	float B;
 
 	Color_t operator * (Color_t col){
-		return Color_t(this->R * col.R,this->G * col.G, this->B * col.B);
+		return Color_t(this->R * col.R, this->G * col.G, this->B * col.B);
 	}
 
 	template<class T>

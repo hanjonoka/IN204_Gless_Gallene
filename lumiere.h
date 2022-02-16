@@ -98,11 +98,12 @@ public:
         Color_t col_dif = Color_t(0,0,0);
         for(auto it = std::begin(*sources); it != std::end(*sources); ++it){
             Sphere_t* s = *it;
+            Sphere_t* o = intersect->object;
             Vector_t dir_diff = s->centre - point;
             float kd = (dir_diff ^ normale) * (1/(dir_diff.norme() * normale.norme()));
             if(kd<0) break;
             Rayon_t diff = Rayon_t(point, dir_diff, scene, sources, nb_rebond, true);
-            col_dif = col_dif + (diff.color * kd);
+            col_dif = col_dif + (o->material.col_diff * diff.color * kd);
         }
 
         //Calcul du rayon réfléchi
@@ -111,9 +112,9 @@ public:
 
         //TODO : Calcule du rayon réfracté
 
-        this->color = Color_t((col_dif.R+refl.color.R)/2, (col_dif.G+refl.color.G)/2, (col_dif.B+refl.color.B)/2);
+        // this->color = Color_t((col_dif.R+refl.color.R)/2, (col_dif.G+refl.color.G)/2, (col_dif.B+refl.color.B)/2);
         // this->color = diff.color;
-        // this->color = Color_t(0,255,0);
+        this->color = col_dif;
     }
 };
 

@@ -23,20 +23,20 @@ void init_scene()
 
     camera = new Camera(Vector_t(0,0,0), Vector_t(0,0,1), 50);
 
-    Sphere_t* sphere = new Sphere_t(Vector_t(0,0,10), 2, Color_t(255,0,0), false);
+    Sphere_t* sphere = new Sphere_t(Vector_t(0,0,10), 2, Color_t(1,0,0), Material::get_gris_mat(),false);
     std::cout << sphere << "\n";
     scene->emplace_back(sphere);
 
-    sphere = new Sphere_t(Vector_t(3,-3,2), 1, Color_t(0,255,0), false);
+    sphere = new Sphere_t(Vector_t(3,-3,2), 1, Color_t(0,1,0), Material::get_vert_mat(), false);
     std::cout << sphere << "\n";
     scene->emplace_back(sphere);
 
-    sphere = new Sphere_t(Vector_t(5,5,5), 1, Color_t(255,0,0), true);
+    sphere = new Sphere_t(Vector_t(5,5,5), 1, Color_t(1,0,0), Material(), true);
     source = sphere;
     scene->emplace_back(sphere);
     sources->emplace_back(sphere);
 
-    sphere = new Sphere_t(Vector_t(5,5,15), 1, Color_t(0,255,0), true);
+    sphere = new Sphere_t(Vector_t(5,5,15), 1, Color_t(1,1,1), Material(), true);
     source = sphere;
     scene->emplace_back(sphere);
     sources->emplace_back(sphere);
@@ -61,7 +61,7 @@ int main()
         matrice[i] = ray;
 
         //correct color so it doesn't overflow
-        float exposure = -1.00f;
+        float exposure = -5.00f;
         ray->color.R = (1.0f - expf(ray->color.R * exposure))*255;
         ray->color.G = (1.0f - expf(ray->color.G * exposure))*255;
         ray->color.B = (1.0f - expf(ray->color.B * exposure))*255;
