@@ -1,7 +1,14 @@
 #ifndef OBJETS_H
 #define OBJETS_H
 
+#include <iostream>
+#include <fstream>
+#include <string>
 #include "utils.h"
+//#include "rapidjson/document.h"
+//using namespace rapidjson;
+#include "nlohmann/json.hpp"
+using json = nlohmann::json;
 
 class Sphere_t;
 
@@ -56,6 +63,21 @@ public:
         couleur = sphere.couleur;
         source = sphere.source;
     }
+
+	/* Constructs the object with one value from the json file */
+	void load_json(json data) {
+		double x = data["centre"][0];
+		double y = data["centre"][1];
+		double z = data["centre"][2];
+		centre = Vector_t(x, y, z);
+		int r = data["couleur"][0];
+		int g = data["couleur"][1];
+		int b = data["couleur"][2];
+		couleur = Color_t(r, g, b);
+		radius = data["radius"];
+		source = data["source"];
+		
+	}
 
     Intersection_t* calcul_intersection(Vector_t direction, Vector_t origine) // Return an object Intersection representing the intersection of the ray with the current object
     {
