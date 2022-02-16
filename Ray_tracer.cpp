@@ -82,13 +82,17 @@ void init_scene(char* filename)
     // sources->emplace_back(sphere);
 }
 
-int main()
+int main(int argc, char *argv[])
 {
+    if(argc!=2){
+        std::cerr << "expected exactly 1 argument : filename\n";
+        return 1;
+    }
     // Preparation de l'image de retour, format PPM
     std::ofstream image("image.ppm");
     image << "P3\n" << width << " " << height << "\n255\n";
 
-    init_scene("scene.json");
+    init_scene(argv[1]);
     std::cout << "init scene !\n";
 
     Rayon_t* matrice[height*width];

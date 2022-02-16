@@ -51,6 +51,10 @@ public:
         return Material(0.1,0.05,0.98,80,1.5,Color_t(1,0.95,0.95),Color_t(1,1,1));
     }
 
+    static Material get_green_glass(){
+        return Material(0.1,0.05,0.98,80,1.5,Color_t(0.95,1,0.95),Color_t(1,1,1));
+    }
+
     static Material get_material(int i){
         switch(i){
             case 0:
@@ -63,6 +67,8 @@ public:
                 return get_bronze();
             case 4:
                 return get_red_glass();
+            case 5:
+                return get_green_glass();
             default :
                 return get_gris_mat();
         }
