@@ -31,7 +31,7 @@
             "type" : 0,
             "centre" : [-5, -5, 5],
             "radius" : 1,
-            "couleur" : [0, 1, 0],
+            "couleur" : [1, 1, 1],
             "source" : true,
             "material" : -1
         },
@@ -40,7 +40,7 @@
             "type" : 0,
             "centre" : [5, 5, 5],
             "radius" : 1,
-            "couleur" : [1, 1, 1],
+            "couleur" : [1, 0, 0],
             "source" : true,
             "material" : -1
         },

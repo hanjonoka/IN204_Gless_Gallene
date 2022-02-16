@@ -59,16 +59,16 @@ class Sphere_t : public Objet_t
 {   
 public:    
     float radius;
-    bool has_interior = true;
 
     Sphere_t() : radius(1)
-    {}
+    {this->has_interior=true;}
 
     Sphere_t(Vector_t centre, double radius, Color_t couleur, Material material) : radius(radius) {
         this->centre = centre;
         this->couleur = couleur;
         this->source = false;
         this->material = material;
+        this->has_interior=true;
     }
 
     Sphere_t(Vector_t centre, double radius, Color_t couleur, Material material, bool source) : radius(radius) {
@@ -76,6 +76,7 @@ public:
         this->couleur = couleur;
         this->source = source;
         this->material = material;
+        this->has_interior=true;
     }
 
     Sphere_t(const Sphere_t &sphere)
@@ -85,6 +86,7 @@ public:
         couleur = sphere.couleur;
         source = sphere.source;
         material = sphere.material;
+        this->has_interior=true;
     }
 
 	/* Construct the object with one value from the json file */
@@ -151,7 +153,6 @@ class Plan_t : public Objet_t
 {
 public :
     Vector_t normale;
-    bool has_interior = false;
 
     Plan_t() : normale(Vector_t(1, 0 , 0))
     {}
@@ -161,6 +162,7 @@ public :
         this->couleur = couleur;
         this->source = false;
         this->material = material;
+        this->has_interior = false;
     }
 
     Plan_t(Vector_t centre, Vector_t normale, Color_t couleur, Material material, bool source) : normale(normale) {
@@ -168,6 +170,7 @@ public :
         this->couleur = couleur;
         this->source = source;
         this->material = material;
+        this->has_interior = false;
     }
 
     Plan_t(const Plan_t &plan)
@@ -177,6 +180,7 @@ public :
         couleur = plan.couleur;
         source = plan.source;
         material = plan.material;
+        this->has_interior = false;
     }
 
     /* Construct the object with one value from the json file */
