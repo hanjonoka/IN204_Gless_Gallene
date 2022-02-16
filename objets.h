@@ -78,6 +78,7 @@ public:
 		couleur = Color_t(r, g, b);
 		radius = data["radius"];
 		source = data["source"];
+        material = Material::get_material(data["material"]);
 	}
 
     Intersection_t* calcul_intersection(Vector_t direction, Vector_t origine) // Return an object Intersection representing the intersection of the ray with the current object
