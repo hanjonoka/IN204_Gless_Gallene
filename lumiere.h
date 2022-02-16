@@ -108,7 +108,8 @@ public:
     void lancer_rayons()
     {
         Vector_t point = (this->origine + (this->direction * (this->intersect->distance/this->direction.norme()) ) );
-        Vector_t normale = this->intersect->normale;
+        Vector_t normale = this->intersect->normale*(1/this->intersect->normale.norme());
+        Vector_t dir_norm = direction*(1/direction.norme());
         Sphere_t* o = intersect->object;
 
         Color_t col_dif = Color_t(0,0,0);
@@ -135,19 +136,21 @@ public:
 
         //Calcul du rayon réfracté
 
-
         //refracte = true si on est dans un objet.
-        float r = refracte ? indice_milieu / o->material.i_refr : o->material.i_refr / indice_milieu; //indice d'entrée/indice de sortie. 
+        float r = !refracte ? indice_milieu / o->material.i_refr : o->material.i_refr / indice_milieu; //indice d'entrée/indice de sortie. 
 
-        float c = -(normale^this->direction)/(normale.norme()*this->direction.norme());
+        float c1 = -(normale^this->direction);
+        float c2 = sqrt(1 - (pow(r,2) * (1-pow(c1,2))));
+        if(c1<0){
+            c2 = -c2;
+        }
+        Vector_t vec = (normale * (r*c1 - c2));
+        Vector_t dir_refr = (dir_norm*r);
+        dir_refr = dir_refr + vec;
+        Rayon_t refr = Rayon_t( point+(this->direction*(0.01/this->direction.norme())) , dir_refr,scene,sources,nb_rebond,!refracte);
+        col_refr = refr.color * o->material.k_refr;
 
-        Vector_t dir_refr = (this->direction*r) + (normale * (r*c - sqrt(1-(pow(r,2)*(1-pow(c,2)) )) ) );
-        Rayon_t refr = Rayon_t(point, dir_refr,scene,sources,nb_rebond,!refracte);
-        col_refr = refracte ? refr.color : refr.color * o->material.k_refr;
 
-
-        // this->color = Color_t((col_dif.R+refl.color.R)/2, (col_dif.G+refl.color.G)/2, (col_dif.B+refl.color.B)/2);
-        // this->color = diff.color;
         this->color = col_dif + col_refl + col_refr;
     }
 

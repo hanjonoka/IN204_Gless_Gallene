@@ -110,8 +110,17 @@ public:
             double c = sqrt(pow(this->radius, 2) - pow(d, 2)); // pythagorean theorem
             double di1 = distance - c;
 
-            Vector_t i1 = origine + ((direction * (1/direction.norme())) * di1);
-            Vector_t normale = i1 - this->centre;
+            Vector_t i1 = origine + (dir_norm * di1);
+
+            Vector_t normale;
+            //si on est à l'intérieur de la sphere.
+            if((direction ^ (i1 - origine)) <= 0){
+                i1 = i1 + (dir_norm * (2 * c));
+                di1 += 2*c;
+                normale = this->centre-i1;
+            }else{
+                normale = i1 - this->centre;
+            }
             return new Intersection_t(di1, normale, this);
         }
     }

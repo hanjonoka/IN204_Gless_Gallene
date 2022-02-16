@@ -1,0 +1,28 @@
+{
+    "Objects" : [
+        {
+            "centre" : [0, 0, 10],
+            "radius" : 3,
+            "couleur" : [1, 0, 0],
+            "source" : false,
+            "material" : 4
+        },
+
+        {
+            "centre" : [0, 0, 0],
+            "radius" : 1,
+            "couleur" : [1,1,1],
+            "source" : true,
+            "material" : -1
+        },
+        
+        {
+            "centre" : [5,0,20],
+            "radius" : 5,
+            "couleur" : [0, 1, 0],
+            "source" : false,
+            "material" : 1
+        }
+
+    ]
+}

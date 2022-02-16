@@ -95,6 +95,9 @@ int main(int argc, char *argv[])
     init_scene(argv[1]);
     std::cout << "init scene !\n";
 
+    // Vector_t dir = Vector_t(camera->direction);
+    // Rayon_t ray = Rayon_t(camera->position, dir, scene, sources);
+
     Rayon_t* matrice[height*width];
     for (int i=0; i<height*width; i++)
     {
