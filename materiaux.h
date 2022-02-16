@@ -12,32 +12,43 @@ public:
     float k_refl;
     float k_refr;
     float k_spec;
+    float i_refr;
 
     Material(){};
 
-    Material(float k_diff, float k_refl, float k_refr, float  k_spec, Color_t col_dif, Color_t col_spec){
+    Material(float k_diff, float k_refl, float k_refr, float  k_spec, float i_refr, Color_t col_dif, Color_t col_spec){
         this->k_diff = k_diff;
         this->k_refl = k_refl;
         this->k_refr = k_refr;
         this->k_spec = k_spec;
+        this->i_refr = i_refr;
+
         this->col_diff = col_dif;
         this->col_spec = col_spec;
     }
 
+    static Material get_source(Color_t color){
+        return Material(0.0,0.0,0,0,1,color,Color_t(0,0,0));
+    }
+
     static Material get_gris_mat(){
-        return Material(0.7,0.3,0, 0.1,Color_t(0.2,0.2,0.2),Color_t(0.2,0.2,0.2));
+        return Material(0.7,0.3,0,0.1,1,Color_t(0.2,0.2,0.2),Color_t(0.2,0.2,0.2));
     }
 
     static Material get_vert_mat(){
-        return Material(0.7, 0.3, 0, 0.1,Color_t(0.2,1,0.2),Color_t(0.1,0.2,0.1));
+        return Material(0.7, 0.3, 0, 0.1,1,Color_t(0.2,1,0.2),Color_t(0.1,0.2,0.1));
     }
 
     static Material get_rouge_mat(){
-        return Material(0.7,0.3,0, 0.1,Color_t(0.8,0.2,0.2),Color_t(0.2,1,0.1));
+        return Material(0.7,0.3,0, 0.1,1,Color_t(0.8,0.2,0.2),Color_t(0.2,1,0.1));
     }
 
     static Material get_bronze(){
-        return Material(0.5,0.75,0.0,56,Color_t(0.714,0.4284,0.18144),Color_t(0.9,0.8,0.7));
+        return Material(0.5,0.75,0.0,56,1,Color_t(0.714,0.4284,0.18144),Color_t(0.9,0.8,0.7));
+    }
+
+    static Material get_red_glass(){
+        return Material(0.1,0.05,0.98,80,1.5,Color_t(1,0.95,0.95),Color_t(1,1,1));
     }
 
     static Material get_material(int i){
@@ -50,6 +61,8 @@ public:
                 return get_vert_mat();
             case 3:
                 return get_bronze();
+            case 4:
+                return get_red_glass();
             default :
                 return get_gris_mat();
         }

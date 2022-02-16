@@ -13,7 +13,7 @@
             "radius" : 0.5,
             "couleur" : [0, 1, 0],
             "source" : false,
-            "material" : 1
+            "material" : 4
         },
 
         {
@@ -27,7 +27,7 @@
         {
             "centre" : [-5, -5, 5],
             "radius" : 1,
-            "couleur" : [1, 1, 1],
+            "couleur" : [1, 0, 0],
             "source" : true,
             "material" : -1
         },
@@ -35,7 +35,7 @@
         {
             "centre" : [5, 5, 5],
             "radius" : 1,
-            "couleur" : [1, 0, 0],
+            "couleur" : [1, 1, 1],
             "source" : true,
             "material" : -1
         }
