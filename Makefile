@@ -34,6 +34,8 @@ bin/utils.o:
 Ray_tracer.exe:	$(HEADS) Ray_tracer.cpp
 	$(CXX) $(CXXFLAGS) $($EADS) Ray_tracer.cpp -o Ray_tracer.exe
 
+testplan: testplan.cpp
+	$(CXX) $(CXXFLAGS) -o testplan.exe testplan.cpp objets.h utils.h materiaux.h
 
 help: 
 	@echo "Available targets : "

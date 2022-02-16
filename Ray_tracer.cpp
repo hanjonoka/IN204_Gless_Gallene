@@ -15,33 +15,16 @@ using json = nlohmann::json;
 #define height 500
 #define width 500
 
-std::vector<Sphere_t*>* scene;
-std::vector<Sphere_t*>* sources;
+std::vector<Objet_t*>* scene;
+std::vector<Objet_t*>* sources;
 Sphere_t* source;
 Camera* camera;
-
-Sphere_t* load_json(json data) {
-    Sphere_t* sphere = new Sphere_t();
-    double x = data["centre"][0];
-    double y = data["centre"][1];
-    double z = data["centre"][2];
-    sphere->centre = Vector_t(x, y, z);
-    uint8_t r = data["couleur"][0];
-    uint8_t g = data["couleur"][1];
-    uint8_t b = data["couleur"][2];
-    sphere->couleur = Color_t(r, g, b);
-    sphere->radius = data["radius"];
-    sphere->source = data["source"];
-    return sphere;
-}
-
-
 
 
 void init_scene(char* filename)
 {
-    scene = new std::vector<Sphere_t*>;
-    sources = new std::vector<Sphere_t*>;
+    scene = new std::vector<Objet_t*>;
+    sources = new std::vector<Objet_t*>;
 
     camera = new Camera(Vector_t(0,0,0), Vector_t(0,0,1), 50);
 
@@ -50,11 +33,13 @@ void init_scene(char* filename)
     json d;
 	if (myfile.is_open()) {
 		myfile >> d;
+        Objet_t* objet;
         for (int i = 0; i<(int)(d["Objects"].size()); ++i) {
-            Sphere_t* sphere = new Sphere_t();
-            sphere->load_json(d["Objects"][i]);
-            scene->emplace_back(sphere);
-            if (sphere->source) sources->emplace_back(sphere);
+            if (d["Objects"][i]["type"]==0) objet = new Sphere_t();
+            else objet = new Plan_t();
+            objet->load_json(d["Objects"][i]);
+            scene->emplace_back(objet);
+            if (objet->source) sources->emplace_back(objet);
         }
         myfile.close();
     }
@@ -118,4 +103,3 @@ int main(int argc, char *argv[])
     image.close();
     return 0;
 }
-

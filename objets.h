@@ -11,7 +11,7 @@
 #include "nlohmann/json.hpp"
 using json = nlohmann::json;
 
-class Sphere_t;
+class Objet_t;
 
 class Intersection_t
 {
@@ -19,7 +19,7 @@ public :
 
 	double distance;
 	Vector_t normale;
-	Sphere_t* object = NULL;
+	Objet_t* object = NULL;
     
 	Intersection_t()
 	{
@@ -27,7 +27,7 @@ public :
 		object = NULL;
 	}
 
-	Intersection_t(double dist, Vector_t vect, Sphere_t* o)
+	Intersection_t(double dist, Vector_t vect, Objet_t* o)
 	{
 		distance = dist;
 		normale = vect;
@@ -37,25 +37,46 @@ public :
 
 };
 
-class Sphere_t
-{   
+class Objet_t
+{
 public:    
     Vector_t centre;
-    float radius;
     Color_t couleur;
     bool source;
     Material material;
+    bool has_interior;
 
-    Sphere_t() : centre(Vector_t()), radius(1), couleur(Color_t(0, 0, 0)), source(false)
+    Objet_t() : centre(Vector_t()), couleur(Color_t(0, 0, 0)), source(false), material(Material())
     {}
 
-    Sphere_t(Vector_t centre, double radius, Color_t couleur, Material material) :
-        centre(centre), radius(radius), couleur(couleur), source(false), material(material)
+    virtual void load_json(json data)=0;
+
+    virtual Intersection_t* calcul_intersection(Vector_t direction, Vector_t origine)=0;
+
+};
+
+class Sphere_t : public Objet_t
+{   
+public:    
+    float radius;
+    bool has_interior = true;
+
+    Sphere_t() : radius(1)
     {}
 
-    Sphere_t(Vector_t centre, double radius, Color_t couleur, Material material, bool source) :
-        centre(centre), radius(radius), couleur(couleur), source(source), material(material)
-    {}
+    Sphere_t(Vector_t centre, double radius, Color_t couleur, Material material) : radius(radius) {
+        this->centre = centre;
+        this->couleur = couleur;
+        this->source = false;
+        this->material = material;
+    }
+
+    Sphere_t(Vector_t centre, double radius, Color_t couleur, Material material, bool source) : radius(radius) {
+        this->centre = centre;
+        this->couleur = couleur;
+        this->source = source;
+        this->material = material;
+    }
 
     Sphere_t(const Sphere_t &sphere)
     {
@@ -126,5 +147,78 @@ public:
     }
 };
 
+class Plan_t : public Objet_t
+{
+public :
+    Vector_t normale;
+    bool has_interior = false;
+
+    Plan_t() : normale(Vector_t(1, 0 , 0))
+    {}
+
+    Plan_t(Vector_t centre, Vector_t normale, Color_t couleur, Material material) : normale(normale) {
+        this->centre = centre;
+        this->couleur = couleur;
+        this->source = false;
+        this->material = material;
+    }
+
+    Plan_t(Vector_t centre, Vector_t normale, Color_t couleur, Material material, bool source) : normale(normale) {
+        this->centre = centre;
+        this->couleur = couleur;
+        this->source = source;
+        this->material = material;
+    }
+
+    Plan_t(const Plan_t &plan)
+    {
+        centre = plan.centre;
+        normale = plan.normale;
+        couleur = plan.couleur;
+        source = plan.source;
+        material = plan.material;
+    }
+
+    /* Construct the object with one value from the json file */
+	void load_json(json data) {
+		double x = data["centre"][0];
+		double y = data["centre"][1];
+		double z = data["centre"][2];
+		centre = Vector_t(x, y, z);
+		uint8_t r = data["couleur"][0];
+		uint8_t g = data["couleur"][1];
+		uint8_t b = data["couleur"][2];
+        couleur = Color_t(r, g, b);
+        double u = data["normale"][0];
+		double v = data["normale"][1];
+		double w = data["normale"][2];
+		normale = Vector_t(u, v, w);
+		source = data["source"];
+        material = Material::get_material(data["material"]);
+	}
+
+    /* Adapted from https://askpythonquestions.com/2021/02/25/intersection-point-of-line-and-plane-python/ */
+    Intersection_t* calcul_intersection(Vector_t direction, Vector_t origine) // Return an object Intersection representing the intersection of the ray with the current object
+    {
+        // double eps = 0.0000001;
+        // double dot = normale ^ direction;
+        // if (dot*dot<eps) return NULL;
+        // Vector_t w = origine - centre;
+        // double fac = -(normale ^ w)/dot;
+        // double distance = direction.norme()*fac;
+        Vector_t normale_normee = normale*(1/normale.norme());
+        Vector_t direction_normee = direction*(1/direction.norme());
+
+        double distance = -((origine-centre)^normale_normee)/(direction_normee^normale_normee);
+
+        if(distance<=0) return NULL;
+        if((normale_normee^direction_normee) < 0) normale_normee = normale_normee * -1;
+
+        return new Intersection_t(distance+0.1, normale_normee, this);
+    }
+
+
+
+};
 
 #endif
