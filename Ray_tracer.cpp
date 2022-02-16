@@ -23,7 +23,11 @@ void init_scene()
 
     camera = new Camera(Vector_t(0,0,0), Vector_t(0,0,1), 50);
 
-    Sphere_t* sphere = new Sphere_t(Vector_t(0,0,10), 2, Color_t(1,0,0), Material::get_gris_mat(),false);
+    Sphere_t* sphere = new Sphere_t(Vector_t(0,0,10), 3, Color_t(1,0,0), Material::get_gris_mat(),false);
+    std::cout << sphere << "\n";
+    scene->emplace_back(sphere);
+
+    sphere = new Sphere_t(Vector_t(3,3,6), 0.5, Color_t(1,0,0), Material::get_rouge_mat(),false);
     std::cout << sphere << "\n";
     scene->emplace_back(sphere);
 
@@ -31,12 +35,12 @@ void init_scene()
     std::cout << sphere << "\n";
     scene->emplace_back(sphere);
 
-    sphere = new Sphere_t(Vector_t(5,5,5), 1, Color_t(1,0,0), Material(), true);
+    sphere = new Sphere_t(Vector_t(-5,-5,5), 1, Color_t(1,1,1), Material(), true);
     source = sphere;
     scene->emplace_back(sphere);
     sources->emplace_back(sphere);
 
-    sphere = new Sphere_t(Vector_t(5,5,15), 1, Color_t(1,1,1), Material(), true);
+    sphere = new Sphere_t(Vector_t(5,5,5), 1, Color_t(1,0,0), Material(), true);
     source = sphere;
     scene->emplace_back(sphere);
     sources->emplace_back(sphere);

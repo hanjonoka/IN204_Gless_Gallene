@@ -101,9 +101,10 @@ public:
             Sphere_t* o = intersect->object;
             Vector_t dir_diff = s->centre - point;
             float kd = (dir_diff ^ normale) * (1/(dir_diff.norme() * normale.norme()));
-            if(kd<0) break;
-            Rayon_t diff = Rayon_t(point, dir_diff, scene, sources, nb_rebond, true);
-            col_dif = col_dif + (o->material.col_diff * diff.color * kd);
+            if(kd>0){
+                Rayon_t diff = Rayon_t(point, dir_diff, scene, sources, nb_rebond, true);
+                col_dif = col_dif + (o->material.col_diff * diff.color * kd);
+            }
         }
 
         //Calcul du rayon réfléchi

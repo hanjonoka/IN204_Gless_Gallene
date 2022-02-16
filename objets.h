@@ -34,7 +34,7 @@ class Sphere_t
 {   
 public:    
     Vector_t centre;
-    double radius;
+    float radius;
     Color_t couleur;
     bool source;
     Material material;
