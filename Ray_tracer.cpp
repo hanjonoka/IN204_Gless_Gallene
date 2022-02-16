@@ -54,15 +54,33 @@ void init_scene(char* filename)
             Sphere_t* sphere = new Sphere_t();
             sphere->load_json(d["Objects"][i]);
             scene->emplace_back(sphere);
-            if (sphere->source) { source = sphere; }
+            if (sphere->source) sources->emplace_back(sphere);
         }
         myfile.close();
     }
-	
+
+    // Sphere_t* sphere = new Sphere_t(Vector_t(0,0,10), 3, Color_t(1,0,0), Material::get_gris_mat(),false);
+    // std::cout << sphere << "\n";
+    // scene->emplace_back(sphere);
+
+    // sphere = new Sphere_t(Vector_t(3,3,6), 0.5, Color_t(1,0,0), Material::get_rouge_mat(),false);
+    // std::cout << sphere << "\n";
+    // scene->emplace_back(sphere);
+
+    // sphere = new Sphere_t(Vector_t(3,-3,2), 1, Color_t(0,1,0), Material::get_vert_mat(), false);
+    // std::cout << sphere << "\n";
+    // scene->emplace_back(sphere);
+
+    // sphere = new Sphere_t(Vector_t(-5,-5,5), 1, Color_t(1,1,1), Material(), true);
+    // source = sphere;
+    // scene->emplace_back(sphere);
+    // sources->emplace_back(sphere);
+
+    // sphere = new Sphere_t(Vector_t(5,5,5), 1, Color_t(1,0,0), Material(), true);
+    // source = sphere;
+    // scene->emplace_back(sphere);
+    // sources->emplace_back(sphere);
 }
-
-
-
 
 int main()
 {
@@ -83,7 +101,7 @@ int main()
         matrice[i] = ray;
 
         //correct color so it doesn't overflow
-        float exposure = -1.00f;
+        float exposure = -5.00f;
         ray->color.R = (1.0f - expf(ray->color.R * exposure))*255;
         ray->color.G = (1.0f - expf(ray->color.G * exposure))*255;
         ray->color.B = (1.0f - expf(ray->color.B * exposure))*255;
