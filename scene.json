@@ -17,7 +17,7 @@
         {
             "centre" : [5, 5, 5],
             "radius" : 1,
-            "couleur" : [0, 255, 0],
+            "couleur" : [255, 0, 0],
             "source" : true
         }
 

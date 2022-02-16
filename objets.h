@@ -64,19 +64,18 @@ public:
         source = sphere.source;
     }
 
-	/* Constructs the object with one value from the json file */
+	/* Construct the object with one value from the json file */
 	void load_json(json data) {
 		double x = data["centre"][0];
 		double y = data["centre"][1];
 		double z = data["centre"][2];
 		centre = Vector_t(x, y, z);
-		int r = data["couleur"][0];
-		int g = data["couleur"][1];
-		int b = data["couleur"][2];
+		uint8_t r = data["couleur"][0];
+		uint8_t g = data["couleur"][1];
+		uint8_t b = data["couleur"][2];
 		couleur = Color_t(r, g, b);
 		radius = data["radius"];
 		source = data["source"];
-		
 	}
 
     Intersection_t* calcul_intersection(Vector_t direction, Vector_t origine) // Return an object Intersection representing the intersection of the ray with the current object
