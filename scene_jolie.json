@@ -1,0 +1,66 @@
+{
+    "Objects" : [
+        {
+            "type" : 1,
+            "centre" : [0, 0, 15],
+            "normale" : [0, 0, 1],
+            "couleur" : [1, 1, 0],
+            "source" : false,
+            "material" : 6
+        },
+
+        {
+            "type" : 1,
+            "centre" : [0, -5, 0],
+            "normale" : [0, 1, 0],
+            "couleur" : [1, 1, 0],
+            "source" : false,
+            "material" : 6
+        },
+
+        {
+            "type" : 1,
+            "centre" : [0, 5, 0],
+            "normale" : [0, -1, 0],
+            "couleur" : [1, 1, 0],
+            "source" : false,
+            "material" : 6
+        },
+
+        {
+            "type" : 1,
+            "centre" : [-5, 0, 0],
+            "normale" : [1, 0, 0],
+            "couleur" : [1, 1, 0],
+            "source" : false,
+            "material" : 6
+        },
+
+        {
+            "type" : 1,
+            "centre" : [5, 0, 0],
+            "normale" : [-1, 0, 0],
+            "couleur" : [1, 1, 0],
+            "source" : false,
+            "material" : 6
+        },
+
+        {
+            "type" : 0,
+            "centre" : [-1, -1, 5],
+            "radius" : 1,
+            "couleur" : [1, 0.1, 0.6],
+            "source" : true,
+            "material" : -1
+        },
+
+        {
+            "type" : 0,
+            "centre" : [3, 3, 6],
+            "radius" : 0.5,
+            "couleur" : [0, 1, 0],
+            "source" : false,
+            "material" : 5
+        }
+    ]
+}

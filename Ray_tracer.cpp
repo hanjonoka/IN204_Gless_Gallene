@@ -36,35 +36,14 @@ void init_scene(char* filename)
         Objet_t* objet;
         for (int i = 0; i<(int)(d["Objects"].size()); ++i) {
             if (d["Objects"][i]["type"]==0) objet = new Sphere_t();
-            else objet = new Plan_t();
+            else if (d["Objects"][i]["type"]==1) objet = new Plan_t();
+            else objet = new Rect_t();
             objet->load_json(d["Objects"][i]);
             scene->emplace_back(objet);
             if (objet->source) sources->emplace_back(objet);
         }
         myfile.close();
     }
-
-    // Sphere_t* sphere = new Sphere_t(Vector_t(0,0,10), 3, Color_t(1,0,0), Material::get_gris_mat(),false);
-    // std::cout << sphere << "\n";
-    // scene->emplace_back(sphere);
-
-    // sphere = new Sphere_t(Vector_t(3,3,6), 0.5, Color_t(1,0,0), Material::get_rouge_mat(),false);
-    // std::cout << sphere << "\n";
-    // scene->emplace_back(sphere);
-
-    // sphere = new Sphere_t(Vector_t(3,-3,2), 1, Color_t(0,1,0), Material::get_vert_mat(), false);
-    // std::cout << sphere << "\n";
-    // scene->emplace_back(sphere);
-
-    // sphere = new Sphere_t(Vector_t(-5,-5,5), 1, Color_t(1,1,1), Material(), true);
-    // source = sphere;
-    // scene->emplace_back(sphere);
-    // sources->emplace_back(sphere);
-
-    // sphere = new Sphere_t(Vector_t(5,5,5), 1, Color_t(1,0,0), Material(), true);
-    // source = sphere;
-    // scene->emplace_back(sphere);
-    // sources->emplace_back(sphere);
 }
 
 int main(int argc, char *argv[])
@@ -80,14 +59,10 @@ int main(int argc, char *argv[])
     init_scene(argv[1]);
     std::cout << "init scene !\n";
 
-    // Vector_t dir = Vector_t(camera->direction);
-    // Rayon_t ray = Rayon_t(camera->position, dir, scene, sources);
-
     Rayon_t* matrice[height*width];
     for (int i=0; i<height*width; i++)
     {
         Vector_t dir = Vector_t(camera->direction + (Vector_t(50/((100.0f-camera->FOV)*(width/2)),0,0)*((i%width)-(width/2))) + (Vector_t(0,50/((100.0f-camera->FOV)*(height/2)),0)*((i/width)-(height/2))));
-        // std::cout << dir.u << " " << dir.v << " " << dir.w <<"\n";
         Rayon_t* ray = new Rayon_t(camera->position, dir, scene, sources);
 
         matrice[i] = ray;

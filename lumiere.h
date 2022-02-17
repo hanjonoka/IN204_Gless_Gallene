@@ -81,8 +81,6 @@ public:
     {
         // Trouver un obstacle de la scene qui intersecte, donc dont l'intersection n'est pas NULL, pour avoir une distance
         Intersection_t* premier_obstacle = NULL;
-        //scene[0].intersect
-        //double distance_min = scene[0].intersect(this).
 
         // Iterer dans la scene pour trouver l'objet dont l'intersection est la plus proche de l'origine du rayon
         for(auto it = std::begin(*scene); it != std::end(*scene); ++it) {

@@ -6,8 +6,6 @@
 #include <string>
 #include "utils.h"
 #include "materiaux.h"
-//#include "rapidjson/document.h"
-//using namespace rapidjson;
 #include "nlohmann/json.hpp"
 using json = nlohmann::json;
 
@@ -111,13 +109,13 @@ public:
     Intersection_t* calcul_intersection(Vector_t direction, Vector_t origine) // Return an object Intersection representing the intersection of the ray with the current object
     {
         // check if pc is not behind the origin of the ray
-        Vector_t v = this->centre - origine;  // %%%% VERIFIER QUE LE - FONCTIONNE SUR LES POSITIONS
+        Vector_t v = this->centre - origine; 
         Vector_t dir_norm = (direction * (1/direction.norme()));
         double distance = (v ^ direction)/direction.norme();
-        if (distance <= 0) {return NULL;}  // %%%% VERIFIER QUE LE PRODUIT SCALAIRE * FONCTIONNE
+        if (distance <= 0) {return NULL;} 
 
         // find pc the projection of the center on the ray
-        Vector_t pc = origine + (dir_norm * distance); // %%% VERIF QUE DOUBLE * VECTOR FONCTIONNE OU IMPLEMENTER PROJ
+        Vector_t pc = origine + (dir_norm * distance);
 
         // check the distance d between pc and the center
         double d = (pc - this->centre).norme();
@@ -204,12 +202,6 @@ public :
     /* Adapted from https://askpythonquestions.com/2021/02/25/intersection-point-of-line-and-plane-python/ */
     Intersection_t* calcul_intersection(Vector_t direction, Vector_t origine) // Return an object Intersection representing the intersection of the ray with the current object
     {
-        // double eps = 0.0000001;
-        // double dot = normale ^ direction;
-        // if (dot*dot<eps) return NULL;
-        // Vector_t w = origine - centre;
-        // double fac = -(normale ^ w)/dot;
-        // double distance = direction.norme()*fac;
         Vector_t normale_normee = normale*(1/normale.norme());
         Vector_t direction_normee = direction*(1/direction.norme());
 
@@ -219,6 +211,93 @@ public :
         if((normale_normee^direction_normee) < 0) normale_normee = normale_normee * -1;
 
         return new Intersection_t(distance+0.1, normale_normee, this);
+    }
+
+
+
+};
+
+class Rect_t : public Plan_t
+{
+public:
+    Vector_t orientation;
+    double width;
+    double height;
+
+    Rect_t() : orientation(Vector_t(0, 1, 0))
+    {}
+
+    Rect_t(Vector_t centre, Vector_t normale, Vector_t orientation, double width, double height, Color_t couleur, Material material) : orientation(orientation), width(width), height(height) {
+        this->centre = centre;
+        this->couleur = couleur;
+        this->normale = normale;
+        this->source = false;
+        this->material = material;
+        this->has_interior = false;
+    }
+
+    Rect_t(Vector_t centre, Vector_t normale, Vector_t orientation, double width, double height, Color_t couleur, Material material, bool source) : orientation(orientation), width(width), height(height) {
+        this->centre = centre;
+        this->couleur = couleur;
+        this->normale = normale;
+        this->source = source;
+        this->material = material;
+        this->has_interior = false;
+    }
+
+    Rect_t(const Rect_t &rect)
+    {
+        centre = rect.centre;
+        normale = rect.normale;
+        couleur = rect.couleur;
+        source = rect.source;
+        material = rect.material;
+        orientation = rect.orientation;
+        width = rect.width;
+        height = rect.height;
+        this->has_interior = false;
+    }
+
+    /* Construct the object with one value from the json file */
+	void load_json(json data) {
+		double x = data["centre"][0];
+		double y = data["centre"][1];
+		double z = data["centre"][2];
+		centre = Vector_t(x, y, z);
+		uint8_t r = data["couleur"][0];
+		uint8_t g = data["couleur"][1];
+		uint8_t b = data["couleur"][2];
+        couleur = Color_t(r, g, b);
+        double u = data["normale"][0];
+		double v = data["normale"][1];
+		double w = data["normale"][2];
+		normale = Vector_t(u, v, w);
+        double i = data["orientation"][0];
+		double j = data["orientation"][1];
+		double k = data["orientation"][2];
+		orientation = Vector_t(i, j, k);
+        width = data["width"];
+        height = data["height"];
+		source = data["source"];
+        material = Material::get_material(data["material"]);
+	}
+
+    /* Adapted from https://askpythonquestions.com/2021/02/25/intersection-point-of-line-and-plane-python/ */
+    Intersection_t* calcul_intersection(Vector_t direction, Vector_t origine) // Return an object Intersection representing the intersection of the ray with the current object
+    {
+        Vector_t normale_normee = normale*(1/normale.norme());
+        Vector_t direction_normee = direction*(1/direction.norme());
+
+        double distance = -((origine-centre)^normale_normee)/(direction_normee^normale_normee);
+
+        if(distance<=0) return NULL;
+        if((normale_normee^direction_normee) < 0) normale_normee = normale_normee * -1;
+
+        Vector_t u = origine + direction * distance - centre;
+        Vector_t w = Vector_t(orientation.v*normale.w-orientation.w*normale.v, orientation.w*normale.u-orientation.u*normale.w, orientation.u*normale.v-orientation.v*normale.u);
+        
+        if ((u^orientation) >= 0 && (u^orientation)<(width*orientation.norme()) && (u^w)>=0 && (u^w)<(height*orientation.norme()*normale.norme())) return new Intersection_t(distance+0.1, normale_normee, this);
+        else return NULL;
     }
 
 
