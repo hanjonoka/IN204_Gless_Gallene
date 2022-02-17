@@ -127,7 +127,7 @@ public:
 
             //Calcul du rayon réfléchi
             Vector_t dir_refl = direction - (normale * (direction^ (normale*2)) );
-            Rayon_t refl = Rayon_t(point, dir_refl, scene, sources, nb_rebond, false);
+            Rayon_t refl = Rayon_t(point+((o->centre-point)*0.01), dir_refl, scene, sources, nb_rebond, false);
             col_refl = refl.color * o->material.k_refl;
         }
 
