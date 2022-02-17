@@ -210,7 +210,7 @@ public :
         if(distance<=0) return NULL;
         if((normale_normee^direction_normee) < 0) normale_normee = normale_normee * -1;
 
-        return new Intersection_t(distance+0.1, normale_normee, this);
+        return new Intersection_t(distance+0.001, normale_normee, this);
     }
 
 
