@@ -164,6 +164,7 @@ public:
             }
         }
         this->color = source_diff->couleur;
+        this->color = this->color * (pow((1/dist_to_s),2));
         for(auto it = std::begin(inters); it != std::end(inters); ++it) {
             if((*it)->distance<dist_to_s && (*it)->object!=this->source_diff){
                 this->color = this->color * (*it)->object->material.col_diff * (*it)->object->material.k_refr;

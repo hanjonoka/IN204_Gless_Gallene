@@ -12,8 +12,8 @@
 using json = nlohmann::json;
 
 
-#define height 500
-#define width 500
+#define height 576
+#define width 720
 
 std::vector<Objet_t*>* scene;
 std::vector<Objet_t*>* sources;
@@ -26,7 +26,8 @@ void init_scene(char* filename)
     scene = new std::vector<Objet_t*>;
     sources = new std::vector<Objet_t*>;
 
-    camera = new Camera(Vector_t(0,0,0), Vector_t(0,0,1), 50);
+    camera = new Camera(Vector_t(0,0,0), Vector_t(0,0,1), 55);
+    camera->direction = camera->direction*(1/camera->direction.norme()); 
 
     /* Parsing json to create the scene */
     std::ifstream myfile(filename);
@@ -62,13 +63,14 @@ int main(int argc, char *argv[])
     Rayon_t* matrice[height*width];
     for (int i=0; i<height*width; i++)
     {
-        Vector_t dir = Vector_t(camera->direction + (Vector_t(50/((100.0f-camera->FOV)*(width/2)),0,0)*((i%width)-(width/2))) + (Vector_t(0,50/((100.0f-camera->FOV)*(height/2)),0)*((i/width)-(height/2))));
+        Vector_t balay = (Vector_t(50/((100.0f-camera->FOV)*(width/2)),0,0)*((i%width)-(width/2))) + (Vector_t(0,50/((100.0f-camera->FOV)*(width/2)),0)*((i/width)-(height/2)));
+        Vector_t dir = Vector_t(camera->direction + balay);
         Rayon_t* ray = new Rayon_t(camera->position, dir, scene, sources);
 
         matrice[i] = ray;
 
         //correct color so it doesn't overflow
-        float exposure = -5.00f;
+        float exposure = -800.00f;
         ray->color.R = (1.0f - expf(ray->color.R * exposure))*255;
         ray->color.G = (1.0f - expf(ray->color.G * exposure))*255;
         ray->color.B = (1.0f - expf(ray->color.B * exposure))*255;

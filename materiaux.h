@@ -28,11 +28,15 @@ public:
     }
 
     static Material get_source(Color_t color){
-        return Material(0.0,0.0,0,0,1,color,Color_t(0,0,0));
+        return Material(0.0,0.0,1,0,1,color,Color_t(0,0,0));
     }
 
     static Material get_gris_mat(){
         return Material(0.7,0.3,0,0.1,1,Color_t(0.2,0.2,0.2),Color_t(0.2,0.2,0.2));
+    }
+
+    static Material get_gris_clair_mat(){
+        return Material(0.7,0.3,0,0.1,1,Color_t(0.8,0.8,0.8),Color_t(0.8,0.8,0.8));
     }
 
     static Material get_vert_mat(){
@@ -44,7 +48,7 @@ public:
     }
 
     static Material get_bronze(){
-        return Material(0.5,0.75,0.0,56,1,Color_t(0.714,0.4284,0.18144),Color_t(0.9,0.8,0.7));
+        return Material(0.5,0.6,0.0,56,1,Color_t(0.714,0.4284,0.18144),Color_t(0.9,0.5,0.6));
     }
 
     static Material get_red_glass(){
@@ -75,6 +79,8 @@ public:
                 return get_green_glass();
             case 6:
                 return get_rose_mat();
+            case 7:
+                return get_gris_clair_mat();
             default :
                 return get_gris_mat();
         }

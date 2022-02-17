@@ -2,65 +2,110 @@
     "Objects" : [
         {
             "type" : 1,
-            "centre" : [0, 0, 15],
+            "centre" : [0, 0, 30],
             "normale" : [0, 0, 1],
             "couleur" : [1, 1, 0],
             "source" : false,
-            "material" : 6
+            "material" : 7
         },
 
         {
             "type" : 1,
-            "centre" : [0, -5, 0],
+            "centre" : [0, -7, 0],
             "normale" : [0, 1, 0],
             "couleur" : [1, 1, 0],
             "source" : false,
-            "material" : 6
+            "material" : 7
         },
 
         {
             "type" : 1,
-            "centre" : [0, 5, 0],
+            "centre" : [0, 7, 0],
             "normale" : [0, -1, 0],
             "couleur" : [1, 1, 0],
             "source" : false,
-            "material" : 6
+            "material" : 7
         },
 
         {
             "type" : 1,
-            "centre" : [-5, 0, 0],
+            "centre" : [-20, 0, 0],
             "normale" : [1, 0, 0],
             "couleur" : [1, 1, 0],
             "source" : false,
-            "material" : 6
+            "material" : 7
         },
 
         {
             "type" : 1,
-            "centre" : [5, 0, 0],
+            "centre" : [20, 0, 0],
             "normale" : [-1, 0, 0],
             "couleur" : [1, 1, 0],
             "source" : false,
-            "material" : 6
+            "material" : 7
         },
 
         {
             "type" : 0,
-            "centre" : [-1, -1, 5],
-            "radius" : 1,
-            "couleur" : [1, 0.1, 0.6],
+            "centre" : [-10, -5, 25],
+            "radius" : 0.2,
+            "couleur" : [1, 1, 1],
             "source" : true,
             "material" : -1
         },
 
         {
             "type" : 0,
-            "centre" : [3, 3, 6],
+            "centre" : [10, -5, 25],
+            "radius" : 0.2,
+            "couleur" : [1, 1, 1],
+            "source" : true,
+            "material" : -1
+        },
+
+        {
+            "type" : 0,
+            "centre" : [3, 3, 20],
             "radius" : 0.5,
             "couleur" : [0, 1, 0],
             "source" : false,
             "material" : 5
+        },
+
+        {
+            "type" : 0,
+            "centre" : [0, 5, 20],
+            "radius" : 2,
+            "couleur" : [0, 1, 0],
+            "source" : false,
+            "material" : 3
+        },
+
+        {
+            "type" : 0,
+            "centre" : [-3, 3, 6],
+            "radius" : 1,
+            "couleur" : [0, 1, 0],
+            "source" : false,
+            "material" : 4
+        },
+
+        {
+            "type" : 0,
+            "centre" : [0, 2.5, 5],
+            "radius" : 1,
+            "couleur" : [0, 1, 0],
+            "source" : false,
+            "material" : 4
+        },
+
+        {
+            "type" : 0,
+            "centre" : [-5, 4, 10],
+            "radius" : 2,
+            "couleur" : [0, 1, 0],
+            "source" : false,
+            "material" : 2
         }
     ]
 }
