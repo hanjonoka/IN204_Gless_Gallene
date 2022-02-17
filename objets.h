@@ -136,9 +136,9 @@ public:
             Vector_t normale;
             //si on est à l'intérieur de la sphere.
             if((direction ^ (i1 - origine)) <= 0){
-                i1 = i1 + (dir_norm * (2 * c));
+                i1 = (i1 + (dir_norm * (2 * c)))+((this->centre-i1) * (0.1));
                 di1 += 2*c;
-                normale = this->centre-i1;
+                normale = (this->centre-i1);
             }else{
                 normale = i1 - this->centre;
             }
